@@ -3,6 +3,7 @@ package projectbookstore.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String firstFieldName;
@@ -18,18 +19,19 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         Class<?> clazz = value.getClass();
         try {
-            Field firstField = clazz.getDeclaredField(firstFieldName);
-            firstField.setAccessible(true);
-            Object firstObj = firstField.get(value);
+            Field firstFieldValue = clazz.getDeclaredField(firstFieldName);
+            firstFieldValue.setAccessible(true);
+            Object firstObj = firstFieldValue.get(value);
 
-            Field secondField = clazz.getDeclaredField(secondFieldName);
-            secondField.setAccessible(true);
-            Object secondObj = secondField.get(value);
+            Field secondFieldValue = clazz.getDeclaredField(secondFieldName);
+            secondFieldValue.setAccessible(true);
+            Object secondObj = secondFieldValue.get(value);
 
-            return firstObj == null && secondObj == null
-                    || firstObj != null && firstObj.equals(secondObj);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return false;
+            return Objects.equals(firstObj, secondObj);
+        } catch (NoSuchFieldException e) {
+            throw new IllegalArgumentException("Field not found: " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Illegal access to field: " + e.getMessage());
         }
     }
 }
