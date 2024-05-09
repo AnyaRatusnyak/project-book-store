@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -36,6 +37,28 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(ERRORS_KEY,errors);
 
         return new ResponseEntity<>(body,headers,status);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFound(
+            EntityNotFoundException ex) {
+        Map<String, Object> body = createErrorBody(HttpStatus.NOT_FOUND, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    protected ResponseEntity<Object> handleRegistrationException(
+            RegistrationException ex) {
+        Map<String, Object> body = createErrorBody(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    private Map<String, Object> createErrorBody(HttpStatus status, String message) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP_KEY, LocalDateTime.now());
+        body.put(STATUS_KEY, status);
+        body.put(ERRORS_KEY, message);
+        return body;
     }
 
     private String getErrorMessage(ObjectError e) {
