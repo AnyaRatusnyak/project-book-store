@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: hanna
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {name: email, value: "boris@gmail.com"}
+              - column: {name: password, value: "$2a$10$TC1DvfR9JX4H.9RLTmP03.udUglllB/Mto3/7bE.xu.34aNF/bCOO"}
+              - column: {name: first_name, value: "Boris"}
+              - column: {name: last_name, value: "Borisov"}
+              - column: {name: shipping_address, value: "Odessa, vul.Deribasivska,5/40"}
