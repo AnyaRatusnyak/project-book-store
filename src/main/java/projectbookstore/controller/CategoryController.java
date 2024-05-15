@@ -39,23 +39,7 @@ public class CategoryController {
         return categoryService.findAll(pageable);
     }
 
-    @GetMapping("/{id}/books")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    @Operation(summary = "Get books of a certain category by category id",
-            description = "Get books of a certain category by category id")
-    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
-            @PathVariable Long id, Pageable pageable) {
-        return bookService.findAllByCategoryId(id,pageable);
-    }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    @Operation(summary = "Get a category for id", description = "Get a category for id")
-    public CategoryDto getCategoryById(@PathVariable Long id) {
-        return categoryService.findById(id);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @Operation(summary = "Create a new category", description = "Create a new category")

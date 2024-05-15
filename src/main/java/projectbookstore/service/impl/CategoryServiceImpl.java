@@ -10,7 +10,6 @@ import projectbookstore.exception.EntityNotFoundException;
 import projectbookstore.mapper.BookMapper;
 import projectbookstore.mapper.CategoryMapper;
 import projectbookstore.model.Category;
-import projectbookstore.repository.BookRepository;
 import projectbookstore.repository.CategoryRepository;
 import projectbookstore.service.CategoryService;
 
@@ -19,8 +18,6 @@ import projectbookstore.service.CategoryService;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-    private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
 
     @Override
     public CategoryDto save(CreateCategoryRequestDto requestDto) {
