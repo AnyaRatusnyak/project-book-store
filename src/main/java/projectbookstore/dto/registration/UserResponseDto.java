@@ -1,4 +1,4 @@
-package projectbookstore.dto;
+package projectbookstore.dto.registration;
 
 import lombok.Data;
 
