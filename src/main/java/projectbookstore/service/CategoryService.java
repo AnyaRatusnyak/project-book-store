@@ -9,4 +9,13 @@ public interface CategoryService {
     CategoryDto save(CreateCategoryRequestDto requestDto);
 
     List<CategoryDto> findAll(Pageable pageable);
+
+    //List<Book> findAllByCategoryId(Long categoryId);
+
+
+    CategoryDto findById(Long id);
+
+    CategoryDto update(Long id, CreateCategoryRequestDto requestDto);
+
+    void deleteById(Long id);
 }
