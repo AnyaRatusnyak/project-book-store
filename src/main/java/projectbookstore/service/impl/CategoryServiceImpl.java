@@ -57,7 +57,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void checkCategoryExists(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find a category with id: " + id);
+            throw new EntityNotFoundException("Can`t find a category with id: " + id);
         }
+        categoryRepository.deleteById(id);
     }
 }
