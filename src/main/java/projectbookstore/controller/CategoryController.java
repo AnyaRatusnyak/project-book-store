@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import projectbookstore.dto.book.BookDtoWithoutCategoryIds;
 import projectbookstore.dto.category.CategoryDto;
 import projectbookstore.dto.category.CreateCategoryRequestDto;
+import projectbookstore.service.BookService;
 import projectbookstore.service.CategoryService;
 
 @Tag(name = "Category management", description = "Endpoints for managing categories")
@@ -28,12 +30,22 @@ import projectbookstore.service.CategoryService;
 @RequestMapping(value = "/api/categories")
 public class CategoryController {
     private final CategoryService categoryService;
+    private final BookService bookService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @Operation(summary = "Get all categories", description = "Get list of all available categories")
     public List<CategoryDto> getAll(Authentication authentication, Pageable pageable) {
         return categoryService.findAll(pageable);
+    }
+
+    @GetMapping("/{id}/books")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @Operation(summary = "Get books of a certain category by category id",
+            description = "Get books of a certain category by category id")
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
+            @PathVariable Long id, Pageable pageable) {
+        return bookService.findAllByCategoryId(id,pageable);
     }
 
     @GetMapping("/{id}")

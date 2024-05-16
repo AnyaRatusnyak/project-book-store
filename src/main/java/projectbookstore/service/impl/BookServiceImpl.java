@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import projectbookstore.dto.book.BookDto;
+import projectbookstore.dto.book.BookDtoWithoutCategoryIds;
 import projectbookstore.dto.book.CreateBookRequestDto;
 import projectbookstore.exception.EntityNotFoundException;
 import projectbookstore.mapper.BookMapper;
@@ -37,6 +38,15 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long id, Pageable pageable) {
+        return bookRepository
+                .findAllByCategoryId(id,pageable)
+                .stream()
+                .map(bookMapper::toDtoWithoutCategories)
                 .toList();
     }
 

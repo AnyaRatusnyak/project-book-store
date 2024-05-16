@@ -10,9 +10,6 @@ public interface CategoryService {
 
     List<CategoryDto> findAll(Pageable pageable);
 
-    //List<Book> findAllByCategoryId(Long categoryId);
-
-
     CategoryDto findById(Long id);
 
     CategoryDto update(Long id, CreateCategoryRequestDto requestDto);
