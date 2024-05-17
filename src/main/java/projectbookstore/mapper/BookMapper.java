@@ -7,7 +7,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-import org.mapstruct.MappingTarget;
 import projectbookstore.config.MapperConfig;
 import projectbookstore.dto.book.BookDto;
 import projectbookstore.dto.book.BookDtoWithoutCategoryIds;
