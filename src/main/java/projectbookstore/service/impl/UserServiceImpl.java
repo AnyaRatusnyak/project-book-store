@@ -9,8 +9,10 @@ import projectbookstore.dto.registration.UserResponseDto;
 import projectbookstore.exception.RegistrationException;
 import projectbookstore.mapper.UserMapper;
 import projectbookstore.model.Role;
+import projectbookstore.model.ShoppingCart;
 import projectbookstore.model.User;
 import projectbookstore.repository.RoleRepository;
+import projectbookstore.repository.ShoppingCartRepository;
 import projectbookstore.repository.UserRepository;
 import projectbookstore.service.UserService;
 
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto request)
@@ -33,6 +36,7 @@ public class UserServiceImpl implements UserService {
         Role defaultRole = roleRepository.findByRole(Role.RoleName.USER);
         user.setRoles(Collections.singleton(defaultRole));
         User savedUser = userRepository.save(user);
+        shoppingCartRepository.save(new ShoppingCart(user));
         return userMapper.toDto(savedUser);
     }
 }
