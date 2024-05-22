@@ -1,5 +1,6 @@
 package projectbookstore.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,11 +82,11 @@ public class BookServiceImpl implements BookService {
         Set<Long> existingCategoryIds = categoriesDB.stream()
                 .map(Category::getId)
                 .collect(Collectors.toSet());
-        for (Long categoryId : categoryIds) {
-            if (!existingCategoryIds.contains(categoryId)) {
-                throw new EntityNotFoundException("Category with id "
-                        + categoryId + " does not exist.");
-            }
+        Set<Long> nonExistingCategoryIds = new HashSet<>(categoryIds);
+        nonExistingCategoryIds.removeAll(existingCategoryIds);
+        if (!nonExistingCategoryIds.isEmpty()) {
+            throw new EntityNotFoundException("Categories with ids "
+                    + nonExistingCategoryIds + " do not exist.");
         }
     }
 
