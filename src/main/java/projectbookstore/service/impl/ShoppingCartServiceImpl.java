@@ -2,7 +2,6 @@ package projectbookstore.service.impl;
 
 import jakarta.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import projectbookstore.dto.book.BookDto;
@@ -45,9 +44,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         Optional<CartItem> cartItem = shoppingCart.getCartItems().stream()
                 .filter(i -> i.getBook().getId().equals(bookDto.getId()))
                 .findFirst();
-        cartItem.ifPresent(item -> cartItemService.updateCartItem(item, requestDto.getQuantity()));
+        cartItem.ifPresent(item ->
+                cartItemService.updateCartItem(item, requestDto.getQuantity(), shoppingCart));
 
-        return cartItemService.create(requestDto,shoppingCart);
+        return cartItemService.create(requestDto,shoppingCart,bookDto.getTitle());
     }
 
     @Override
@@ -55,31 +55,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public CartItemDto updateCartItem(Long id, User user, UpdateCartItemDto requestDto) {
         ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
         CartItem cartItem = cartItemRepository.findById(id).get();
-        checkCartItemPresence(id, shoppingCart);
-        return cartItemService.updateCartItem(cartItem, requestDto.getQuantity());
+        return cartItemService.updateCartItem(cartItem, requestDto.getQuantity(), shoppingCart);
     }
 
     @Override
     @Transactional
     public void deleteCartItem(Long id, User user) {
         ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
-        checkCartItemPresence(id, shoppingCart);
-        cartItemService.delete(id);
+        cartItemService.delete(id, shoppingCart);
     }
 
     public ShoppingCart findShoppingCartByUserId(Long userId) {
         return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can`t find shopping cart by user id: " + userId));
-    }
-
-    private void checkCartItemPresence(Long itemId, ShoppingCart shoppingCart) {
-        Set<CartItem> cartItems = shoppingCart.getCartItems();
-        boolean isPresent = cartItems.stream()
-                .anyMatch(item -> item.getId().equals(itemId));
-        if (!isPresent) {
-            throw new EntityNotFoundException(
-                    "Can't find CartItem with id " + itemId + " in your shopping cart");
-        }
     }
 }
