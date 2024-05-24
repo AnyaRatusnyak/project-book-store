@@ -47,7 +47,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItem.ifPresent(item ->
                 cartItemService.updateCartItem(item, requestDto.getQuantity(), shoppingCart));
 
-        return cartItemService.create(requestDto,shoppingCart,bookDto.getTitle());
+        return cartItemService.create(requestDto,shoppingCart);
     }
 
     @Override
