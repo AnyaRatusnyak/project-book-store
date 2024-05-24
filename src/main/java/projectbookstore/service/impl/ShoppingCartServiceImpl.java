@@ -1,9 +1,9 @@
 package projectbookstore.service.impl;
 
-import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import projectbookstore.dto.book.BookDto;
 import projectbookstore.dto.cartitem.CartItemDto;
 import projectbookstore.dto.cartitem.CreateCartItemRequestDto;
@@ -29,7 +29,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookService bookService;
     private final CartItemRepository cartItemRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto findByUserId(User user) {
         ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
