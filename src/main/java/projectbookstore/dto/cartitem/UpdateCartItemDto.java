@@ -1,12 +1,12 @@
 package projectbookstore.dto.cartitem;
 
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UpdateCartItemDto {
+    @NotNull
     @Min(1)
     private int quantity;
 }

@@ -33,7 +33,7 @@ public class ShoppingCart {
     private Long id;
     @Column(nullable = false)
     private boolean isDeleted = false;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @OneToMany(mappedBy = "shoppingCart",fetch = FetchType.LAZY)

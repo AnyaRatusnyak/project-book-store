@@ -7,7 +7,7 @@ import projectbookstore.model.ShoppingCart;
 
 public interface CartItemService {
     CartItemDto create(CreateCartItemRequestDto requestDto,
-                       String title, ShoppingCart shoppingCart);
+                       ShoppingCart shoppingCart);
 
     CartItemDto updateCartItem(CartItem cartItem, int quantity);
 

@@ -20,9 +20,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemDto create(CreateCartItemRequestDto requestDto,
-                              String title, ShoppingCart shoppingCart) {
+                               ShoppingCart shoppingCart) {
         CartItem cartItem = cartItemMapper.toModel(requestDto);
-        cartItem.getBook().setTitle(title);
         cartItem.setShoppingCart(shoppingCart);
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
