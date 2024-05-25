@@ -1,5 +1,6 @@
 package projectbookstore.mapper;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
@@ -37,5 +38,12 @@ public interface BookMapper {
         return categoryIds.stream()
                 .map(Category::new)
                 .collect(Collectors.toSet());
+    }
+
+    @Named("bookFromId")
+    default Book bookFromId(Long id) {
+        return Optional.ofNullable(id)
+                .map(Book::new)
+                .orElse(null);
     }
 }
