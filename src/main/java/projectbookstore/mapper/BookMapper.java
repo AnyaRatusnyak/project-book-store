@@ -19,8 +19,6 @@ import projectbookstore.model.Category;
 public interface BookMapper {
     BookDto toDto(Book book);
 
-    Book toModel(CreateBookRequestDto requestDto);
-
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
     @AfterMapping
