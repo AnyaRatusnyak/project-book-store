@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import projectbookstore.dto.category.CategoryDto;
 import projectbookstore.dto.category.CreateCategoryRequestDto;
 import projectbookstore.exception.EntityNotFoundException;
-import projectbookstore.mapper.BookMapper;
-import projectbookstore.exception.EntityNotFoundException;
 import projectbookstore.mapper.CategoryMapper;
 import projectbookstore.model.Category;
 import projectbookstore.repository.CategoryRepository;
@@ -59,6 +57,5 @@ public class CategoryServiceImpl implements CategoryService {
         if (!categoryRepository.existsById(id)) {
             throw new EntityNotFoundException("Can`t find a category with id: " + id);
         }
-        categoryRepository.deleteById(id);
     }
 }
