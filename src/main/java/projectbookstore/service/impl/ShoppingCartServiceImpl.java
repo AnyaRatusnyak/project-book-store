@@ -1,10 +1,9 @@
 package projectbookstore.service.impl;
 
-import jakarta.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import projectbookstore.dto.book.BookDto;
 import projectbookstore.dto.cartitem.CartItemDto;
 import projectbookstore.dto.cartitem.CreateCartItemRequestDto;
@@ -30,54 +29,45 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookService bookService;
     private final CartItemRepository cartItemRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto findByUserId(User user) {
-        Long userId = user.getId();
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseGet(() -> shoppingCartRepository.save(new ShoppingCart(user)));
+        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
     @Transactional
     public CartItemDto addBookToTheShoppingCart(CreateCartItemRequestDto requestDto, User user) {
-        Long userId = user.getId();
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseGet(() -> shoppingCartRepository.save(new ShoppingCart(user)));
+        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
         BookDto bookDto = bookService.findById(requestDto.getBookId());
         Optional<CartItem> cartItem = shoppingCart.getCartItems().stream()
-                .filter(i -> i.getBook().getTitle().equals(bookDto.getTitle()))
+                .filter(i -> i.getBook().getId().equals(bookDto.getId()))
                 .findFirst();
-        if (cartItem.isPresent()) {
-            cartItemService.updateCartItem(cartItem.get(),requestDto.getQuantity());
-        }
+        cartItem.ifPresent(item ->
+                cartItemService.updateCartItem(item, requestDto.getQuantity(), shoppingCart));
 
-        return cartItemService.create(requestDto,bookDto.getTitle(),shoppingCart);
+        return cartItemService.create(requestDto,shoppingCart);
     }
 
     @Override
     @Transactional
     public CartItemDto updateCartItem(Long id, User user, UpdateCartItemDto requestDto) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
-                .orElseGet(() -> shoppingCartRepository.save(new ShoppingCart(user)));
+        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
         CartItem cartItem = cartItemRepository.findById(id).get();
-        return cartItemService.updateCartItem(cartItem, requestDto.getQuantity());
+        return cartItemService.updateCartItem(cartItem, requestDto.getQuantity(), shoppingCart);
     }
 
     @Override
     @Transactional
     public void deleteCartItem(Long id, User user) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Can`t find shopping cart by "
-                + "user id: " + user.getId()));
-        Set<CartItem> cartItems = shoppingCart.getCartItems();
-        boolean isPresent = cartItems.stream()
-                .anyMatch(item -> item.getId().equals(id));
-        if (!isPresent) {
-            throw new EntityNotFoundException("Can't find CartItem with id " + id
-                    + " not in your shopping cart");
-        }
-        cartItemService.delete(id);
+        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
+        cartItemService.delete(id, shoppingCart);
+    }
+
+    public ShoppingCart findShoppingCartByUserId(Long userId) {
+        return shoppingCartRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Can`t find shopping cart by user id: " + userId));
     }
 }
