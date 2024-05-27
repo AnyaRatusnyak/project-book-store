@@ -1,10 +1,9 @@
 package projectbookstore.service.impl;
 
-import jakarta.transaction.Transactional;
 import java.util.Optional;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import projectbookstore.dto.book.BookDto;
 import projectbookstore.dto.cartitem.CartItemDto;
 import projectbookstore.dto.cartitem.CreateCartItemRequestDto;
