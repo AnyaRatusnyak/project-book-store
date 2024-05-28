@@ -1,12 +1,12 @@
 package projectbookstore.dto.order;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class CreateOrderRequestDto {
     @NotBlank
-    @NotNull
+    @Size(max = 500)
     private String shippingAddress;
 }

@@ -1,9 +1,9 @@
 package projectbookstore.service.impl;
 
-import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import projectbookstore.dto.book.BookDto;
 import projectbookstore.dto.cartitem.CartItemDto;
 import projectbookstore.dto.cartitem.CreateCartItemRequestDto;
@@ -32,14 +32,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional(readOnly = true)
     @Override
     public ShoppingCartDto findByUserId(User user) {
-        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
+        ShoppingCart shoppingCart = getExistedCart(user.getId());
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
     @Transactional
     public CartItemDto addBookToTheShoppingCart(CreateCartItemRequestDto requestDto, User user) {
-        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
+                .orElseGet(() -> shoppingCartRepository.save(new ShoppingCart(user)));
         BookDto bookDto = bookService.findById(requestDto.getBookId());
         Optional<CartItem> cartItem = shoppingCart.getCartItems().stream()
                 .filter(i -> i.getBook().getId().equals(bookDto.getId()))
@@ -53,7 +54,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     @Transactional
     public CartItemDto updateCartItem(Long id, User user, UpdateCartItemDto requestDto) {
-        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
+        ShoppingCart shoppingCart = getExistedCart(user.getId());
         CartItem cartItem = cartItemRepository.findById(id).get();
         return cartItemService.updateCartItem(cartItem, requestDto.getQuantity(), shoppingCart);
     }
@@ -61,11 +62,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     @Transactional
     public void deleteCartItem(Long id, User user) {
-        ShoppingCart shoppingCart = findShoppingCartByUserId(user.getId());
+        ShoppingCart shoppingCart = getExistedCart(user.getId());
         cartItemService.delete(id, shoppingCart);
     }
 
-    public ShoppingCart findShoppingCartByUserId(Long userId) {
+    @Override
+    public ShoppingCart getExistedCart(Long userId) {
         return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can`t find shopping cart by user id: " + userId));
