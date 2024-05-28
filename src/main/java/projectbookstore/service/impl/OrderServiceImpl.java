@@ -1,6 +1,5 @@
 package projectbookstore.service.impl;
 
-import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import projectbookstore.dto.order.CreateOrderRequestDto;
 import projectbookstore.dto.order.OrderDto;
 import projectbookstore.dto.order.UpdateOrderStatusDto;
@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(savedOrder);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<OrderDto> findAllByUser(Pageable pageable, Long userId) {
         return orderRepository.findAllByUserId(pageable,userId).stream()
@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderItemDto> findAllOrderItemsByOrderId(
             Pageable pageable, Long userId, Long orderId) {
-        Order order = getExistedOrder(orderId, userId);
+        Order order = getByIdForUser(orderId, userId);
         checkOrderBelongsUser(userId, order);
         return order.getOrderItems().stream()
                 .map(orderItemMapper::toDto)
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto update(Long id, User user, UpdateOrderStatusDto dto) {
-        Order order = getExistedOrder(id, user.getId());
+        Order order = getByIdForUser(id, user.getId());
         order.setStatus(dto.getStatus());
         return orderMapper.toDto(orderRepository.save(order));
     }
@@ -123,12 +123,12 @@ public class OrderServiceImpl implements OrderService {
 
     private void checkOrderBelongsUser(Long userId, Order order) {
         if (! order.getUser().getId().equals(userId)) {
-            throw new EntityNotFoundException("Can't find an order by order id: "
-                    + order.getId() + " for user id: " + userId);
+            throw new EntityNotFoundException("The order with id  "
+                    + order.getId() + " does not belong to user with id: " + userId);
         }
     }
 
-    private Order getExistedOrder(Long orderId,Long userId) {
+    private Order getByIdForUser(Long orderId,Long userId) {
         return orderRepository.findByOrderIdAndUserId(orderId, userId)
                 .orElseThrow(() -> new EntityNotFoundException("Can`t find an order by "
                         + "order id: " + orderId));
