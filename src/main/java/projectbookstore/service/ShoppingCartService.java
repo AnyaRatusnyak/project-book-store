@@ -4,10 +4,13 @@ import projectbookstore.dto.cartitem.CartItemDto;
 import projectbookstore.dto.cartitem.CreateCartItemRequestDto;
 import projectbookstore.dto.cartitem.UpdateCartItemDto;
 import projectbookstore.dto.shoppingcart.ShoppingCartDto;
+import projectbookstore.model.ShoppingCart;
 import projectbookstore.model.User;
 
 public interface ShoppingCartService {
     ShoppingCartDto findByUserId(User user);
+
+    ShoppingCart getExistedCart(Long userId);
 
     CartItemDto addBookToTheShoppingCart(CreateCartItemRequestDto requestDto, User user);
 
