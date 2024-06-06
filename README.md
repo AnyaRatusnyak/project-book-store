@@ -89,7 +89,7 @@ Admins can manage this online bookstore.  This application serves as the core in
 ### Live Preview 💻
 Check out the live demo of the Book Store application:
 
-- [Live Demo](https://www.loom.com/share/9b5f2e7bd2f845c2ad2a25361530810f)
+- [Live Demo](https://www.loom.com/share/c6710f4f1ba14b339a09f87667c4046c?sid=fd664c29-e2e8-4f5b-92be-cddac9c62bfa)
 
 ### 🌟 Getting Started
 ##### Prerequisites
