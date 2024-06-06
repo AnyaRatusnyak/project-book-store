@@ -18,7 +18,43 @@ Admins can manage this online bookstore.  This application serves as the core in
 ### 🚀 Current Functionalities
 - ##### Authentication 
   - Register a new user: POST /api/auth/register
-  - Authenticate a user: POST /api/auth/login
+    - Example of request body:
+      ```
+      {
+      "email": "john.doe@example.com",
+      "password": "securePassword123",
+      "repeatPassword": "securePassword123",
+      "firstName": "John",
+      "lastName": "Doe",
+      "shippingAddress": "123 Main St, City, Country"
+      }
+      ```
+    - Example of response body:
+      ```
+      {
+      "id": 1,
+      "email": "john.doe@example.com",
+      "firstName": "John",
+      "lastName": "Doe",
+      "shippingAddress": "123 Main St, City, Country"
+      }
+      ```
+  - Authenticate a user: POST /api/auth/login   
+  
+    The Online Bookstore API uses JWT (JSON Web Token) for securing API endpoints. JWTs are issued to users upon successful authentication and must be included in the Authorization header of subsequent requests to protected endpoints.After a user successfully logs in, the server issues a JWT. This token must be included in the Authorization header of subsequent requests to protected endpoints.
+    - Example of request body:
+      ```
+      {
+      "email": "john.doe@example.com",
+      "password": "securePassword123",
+      }
+      ```
+    - Example of response body:
+      ```
+      {
+      "token": "eyJhbGciOiJJ9.eyJzdWIiOiIxMjM0yfQ.SflKssw5c"
+      }
+      ```
 - ##### Book
   - Get books from catalog: GET /api/books
   - Get book for id: GET /api/books/{id}
@@ -44,8 +80,11 @@ Admins can manage this online bookstore.  This application serves as the core in
   - Get a specific OrderItem within an order: GET /api/orders/{orderId}/items/{itemId}
   - Update order status: PATCH /api/orders/{id}
 - #####  Swagger Documentation
-  - the API documentation at http://localhost:8080/swagger-ui.html.
+  - the API documentation at http://localhost:8080/swagger-ui/index.html.
   - You can explore all available endpoints, their descriptions, request parameters, and response schemas.
+
+### Postman Collection 
+- **[Click to use collection](https://www.postman.com/rent-masters/workspace/online-bookstore-api/collection/34492567-9cf5612a-c2d4-40b0-a8e4-8f2e06f2f996?action=share&creator=34492567)**
 
 ### Live Preview 💻
 Check out the live demo of the Book Store application:
@@ -62,13 +101,15 @@ Check out the live demo of the Book Store application:
 To run the application locally, follow these steps:  
 
 1. Clone the Repository
+```
 git clone https://github.com/AnyaRatusnyak/project-book-store.git  
 cd project-book-store
+```
 2. Set up MySQL:
 Create a new MySQL database and note the database URL, username, and password.  
 3. Configure environment variables:
 Create a .env file in the project root directory and populate it with the following environment variables:
-
+```env
 - MYSQLDB_USER=your_db_user_name  
 - MYSQLDB_ROOT_PASSWORD=your_db_password  
 - JWT_SECRET=qwertyuioplkjhgfdsazxcvbnm1234567890 
@@ -81,20 +122,32 @@ Create a .env file in the project root directory and populate it with the follow
 - SPRING_LOCAL_PORT=8080
 - SPRING_DOCKER_PORT=8080
 - DEBUG_PORT=5005
-
-jwt.expiration=token_expiration_time
-jwt.secret=your_secret_key
+- jwt.expiration=token_expiration_time  
+- jwt.secret=your_secret_key
+```
 4. Install dependencies and build the project:
+```
 mvn clean install
+```
 5. Run the application:
+```
 mvn spring-boot:run
+```
 The server will start on http://localhost:8080.
 
 ##### Using Docker
 1. Build the Docker image:
+```
 docker build -t books-store .
-2. Run the Docker container:
-docker run -d -p 8080:8080 --name books-store books-store
+```
+2. Build and Run the Docker Containers:
+```
+docker-compose up
+```
+3. Stop and Remove Containers:
+```
+docker-compose down
+```
 
 ##### 📄 Challenges and Solutions
 Challenge 1: Securing the API
@@ -105,3 +158,7 @@ Solution: Utilized Spring Data JPA and Hibernate for efficient database interact
 
 Challenge 3: Comprehensive API Documentation
 Solution: Integrated Swagger to provide detailed API documentation and facilitate easy testing of endpoints.
+
+##### 👷Author
+- LinkedIn: **[Hanna Ratushniak](https://www.linkedin.com/in/hanna-ratushnyak/)** 
+- Github: **[AnyaRatusnyak](https://github.com/AnyaRatusnyak)**
