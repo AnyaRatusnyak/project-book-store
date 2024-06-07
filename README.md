@@ -41,7 +41,7 @@ Admins can manage this online bookstore.  This application serves as the core in
       ```
   - Authenticate a user: POST /api/auth/login   
   
-    The Online Bookstore API uses JWT (JSON Web Token) for securing API endpoints. JWTs are issued to users upon successful authentication and must be included in the Authorization header of subsequent requests to protected endpoints.After a user successfully logs in, the server issues a JWT. This token must be included in the Authorization header of subsequent requests to protected endpoints.
+    The Online Bookstore API uses JWT (JSON Web Token) for securing API endpoints. JWTs are issued to users upon successful authentication and must be included in the Authorization header of subsequent requests to protected endpoints.
     - Example of request body:
       ```json
       {
