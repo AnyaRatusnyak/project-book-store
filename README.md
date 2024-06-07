@@ -19,7 +19,7 @@ Admins can manage this online bookstore.  This application serves as the core in
 - ##### Authentication 
   - Register a new user: POST /api/auth/register
     - Example of request body:
-      ```
+      ```json
       {
       "email": "john.doe@example.com",
       "password": "securePassword123",
@@ -30,7 +30,7 @@ Admins can manage this online bookstore.  This application serves as the core in
       }
       ```
     - Example of response body:
-      ```
+      ```json
       {
       "id": 1,
       "email": "john.doe@example.com",
@@ -43,14 +43,14 @@ Admins can manage this online bookstore.  This application serves as the core in
   
     The Online Bookstore API uses JWT (JSON Web Token) for securing API endpoints. JWTs are issued to users upon successful authentication and must be included in the Authorization header of subsequent requests to protected endpoints.After a user successfully logs in, the server issues a JWT. This token must be included in the Authorization header of subsequent requests to protected endpoints.
     - Example of request body:
-      ```
+      ```json
       {
       "email": "john.doe@example.com",
       "password": "securePassword123",
       }
       ```
     - Example of response body:
-      ```
+      ```json
       {
       "token": "eyJhbGciOiJJ9.eyJzdWIiOiIxMjM0yfQ.SflKssw5c"
       }
@@ -101,7 +101,7 @@ Check out the live demo of the Book Store application:
 To run the application locally, follow these steps:  
 
 1. Clone the Repository
-```
+```bash
 git clone https://github.com/AnyaRatusnyak/project-book-store.git  
 cd project-book-store
 ```
@@ -126,26 +126,26 @@ Create a .env file in the project root directory and populate it with the follow
 - jwt.secret=your_secret_key
 ```
 4. Install dependencies and build the project:
-```
+```bash
 mvn clean install
 ```
 5. Run the application:
-```
+```bash
 mvn spring-boot:run
 ```
 The server will start on http://localhost:8080.
 
 ##### Using Docker
 1. Build the Docker image:
-```
+```bash
 docker build -t books-store .
 ```
 2. Build and Run the Docker Containers:
-```
+```bash
 docker-compose up
 ```
 3. Stop and Remove Containers:
-```
+```bash
 docker-compose down
 ```
 
