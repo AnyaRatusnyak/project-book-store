@@ -91,6 +91,10 @@ Check out the live demo of the Book Store application:
 
 - [Live Demo](https://www.loom.com/share/c6710f4f1ba14b339a09f87667c4046c?sid=fd664c29-e2e8-4f5b-92be-cddac9c62bfa)
 
+### 🌐 AWS Deployment
+This Online Bookstore API is deployed on AWS, making it accessible anytime, anywhere. You can explore the API's functionality and test each endpoint live via the Swagger UI.
+
+Swagger Documentation: Access the full API documentation on Swagger, hosted on AWS, at <br> http://ec2-54-221-125-103.compute-1.amazonaws.com/swagger-ui/index.html.
 ### 🌟 Getting Started
 ##### Prerequisites
 - Java 17+
